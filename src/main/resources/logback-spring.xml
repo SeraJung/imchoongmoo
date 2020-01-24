@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+            <charset>UTF-8</charset>
+    		<pattern>%d{HH:mm:ss.SSS} [%thread] %-4level [%logger.%method:%line]- %msg%n</pattern>
+        </encoder>
+  	</appender>  
+  	
+    <appender name="LOGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">		
+		<file>${LOG_FILE}</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- 5년 지난 파일은 삭제한다.  -->
+			<maxHistory>1825</maxHistory>
+		</rollingPolicy>		
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-4level [%class{0}.%method:%line] - %msg %n</pattern>
+		</encoder> 			
+	</appender>
+	
+    <logger name="jdbc.sqltiming" level="DEBUG" />
+    <logger name="jdbc.audit" level="ERROR" />
+    <logger name="jdbc.resultset" level="DEBUG" />
+	<logger name="jdbc.sqlonly" level="DEBUG" />
+    <logger name="jdbc.resultsettable" level="DEBUG" />
+    <logger name="jdbc.connection" level="ERROR" />
+    
+    
+    <!-- RULES for logging DEBUG < INFO < WARN < ERROR < FATAL.-->
+    
+    <!-- 로컬 서버 -->
+    <springProfile name="DEFAULT">
+	    <logger name="com.seerooinfo.a3.sys" additivity="false">
+	        <level value="DEBUG" />
+	        <appender-ref ref="LOGFILE" />
+	        <appender-ref ref="CONSOLE" />
+	    </logger>
+    	
+	  	<root>
+			<level value="INFO" />
+	        <appender-ref ref="LOGFILE" />
+			<appender-ref ref="CONSOLE" />
+		</root>
+	</springProfile>
+	
+	<!-- 개발 서버 -->
+	<springProfile name="DEV">
+	  	<logger name="com.seerooinfo.a3.sys" additivity="false">
+	        <level value="DEBUG" />
+	        <appender-ref ref="LOGFILE" />
+	        <appender-ref ref="CONSOLE" />
+	    </logger>
+    	
+	  	<root>
+			<level value="INFO" />
+	        <appender-ref ref="LOGFILE" />
+			<appender-ref ref="CONSOLE" />
+		</root>
+	</springProfile>
+	
+	<!-- 테스트 서버 -->
+	<springProfile name="TEST">
+	    <logger name="com.seerooinfo.a3.sys" additivity="false">
+	        <level value="DEBUG" />
+	        <appender-ref ref="LOGFILE" />
+	        <appender-ref ref="CONSOLE" />
+	    </logger>
+    	
+	  	<root>
+			<level value="INFO" />
+	        <appender-ref ref="LOGFILE" />
+			<appender-ref ref="CONSOLE" />
+		</root>
+	</springProfile>
+	
+	<!-- 운영 서버 -->
+	<springProfile name="PROD">
+	  	<logger name="com.seerooinfo.a3.sys" additivity="false">
+	        <level value="DEBUG" /> <!-- 오픈되면 INFO 로 변경 --> 
+	        <appender-ref ref="LOGFILE" />
+	        <appender-ref ref="CONSOLE" />
+	    </logger>
+    	
+	  	<root>
+			<level value="INFO" />
+	        <appender-ref ref="LOGFILE" />
+			<appender-ref ref="CONSOLE" />
+		</root>
+	</springProfile>
+
+</configuration>
